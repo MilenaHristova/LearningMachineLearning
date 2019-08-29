@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Image Classifier</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="//getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <style>
+        body{
+            width:100%;
+            background-color:#FFE4E1;
+        }
+        .jumbotron{
+            width:100%;
+            background-color:#E9967A;
+        }
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+        .uploadedImg{
+            margin-top: 10px;
+            width: 100%;
+            height: 300px;
+        }
+        .img-upload{
+            height: 100%;
+        }
+        .submitBtn{
+            background-color:#E9967A;
+            margin-top:10px;
+        }
+        .displayResult{
+            text-align:center;
+            margin-top: 30%;
+        }
+        .input-group{
+            width:90%;
+        }
+    </style>
+    <script src="../static/js/jquery-3.1.1.js"></script>
+</head>
+<body>
+<div class="container-body-content">
+    <div class="row text-center">
+       <div class="jumbotron">
+           <h2><b>Art Images Classifier</b></h2>
+       </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group text-center">
+                    <form id="fileUploadForm" method="post" enctype="multipart/form-data">
+                        <h2>Upload Image</h2>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-primary btn-file">
+                                    Browse...<input type="file" name="image" id="image">
+                                </span>
+                            </span>
+                            <input type="text" class="form-control" readonly>
+                        </div>
+                        <div class="row text-center">
+                            <div class="text-center uploadedImg">
+                                <img id="img-upload" class="img-upload">
+                            </div>
+                            <div class="form-group submitBtn">
+                                <p class="text-center">
+                                    <input id="submitBtn" name="submitBtn" class="btn btn-primary" type="submit" value="Predict" />
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="displayResult" id="display-resources"></div>
+            </div>
+    </div>
+    </div>
+
+</div>
+<script>
+	$(document).ready(function () {
+	     $("#submitBtn").click(function (event) {
+
+			  event.preventDefault();
+			  var displayResources = $('#display-resources');
+			  var form = $('#fileUploadForm')[0];
+			  var data = new FormData(form);
+
+			  $.ajax({
+			      type: "POST",
+			      enctype: 'multipart/form-data',
+			      url: "/predict",
+			      data: data,
+			      processData: false,
+			      contentType: false,
+			      cache: false,
+			      timeout: 600000,
+			      timeout: 600000,
+			      success: function (data) {
+			       	var output=
+			       	"<h1> The image is a " + data.prediction + "</h1>";			displayResources.html(output);
+			      },
+			      error: function (e) {
+			          alert("unsuccessful1");
+			      }
+			  });
+		});
+	});
+</script>
+</body>
+
+<script src="../static/js/script.js"></script>
+<script src="../static/js/jquery-3.1.1.js"></script>
+</html>
